@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThrottleOverlay", "ThrottleOverlay.csproj", "{B02AEE8F-208F-46F6-8D34-86C7163E684F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B02AEE8F-208F-46F6-8D34-86C7163E684F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B02AEE8F-208F-46F6-8D34-86C7163E684F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B02AEE8F-208F-46F6-8D34-86C7163E684F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B02AEE8F-208F-46F6-8D34-86C7163E684F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {45B0FA34-27C8-4CA0-BC71-0873C7AD21B7}
+	EndGlobalSection
+EndGlobal

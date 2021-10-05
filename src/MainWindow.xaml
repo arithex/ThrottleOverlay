@@ -1,0 +1,63 @@
+﻿<Window x:Class="ThrottleOverlay.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:ThrottleOverlay"
+        Title="MainWindow" Height="300" Width="20" 
+        WindowState="Normal" WindowStyle="None" Topmost="True"
+        ResizeMode="NoResize" WindowStartupLocation="Manual"
+        AllowsTransparency="True" Background="Transparent">
+    <Viewbox Margin="0" Stretch="Fill">
+        <Grid Width="50" Height="1300" Background="Transparent" Margin="0">
+
+            <!--Indicator: height bound to position of throttle-axis-->
+            <Rectangle x:Name="x_greenMask" Height="550" VerticalAlignment="Bottom" Fill="Green" StrokeThickness="0" />
+
+            <!--10% tick marks-->
+            <Line X1="0" Y1="300" X2="15" Y2="300" Stroke="#222" StrokeThickness="7" />
+            <Line X1="0" Y1="300" X2="15" Y2="300" Stroke="#999" StrokeThickness="3" />
+
+            <Line X1="0" Y1="400" X2="15" Y2="400" Stroke="#222" StrokeThickness="7" />
+            <Line X1="0" Y1="400" X2="15" Y2="400" Stroke="#999" StrokeThickness="3" />
+
+            <Line X1="0" Y1="500" X2="15" Y2="500" Stroke="#222" StrokeThickness="7" />
+            <Line X1="0" Y1="500" X2="15" Y2="500" Stroke="#999" StrokeThickness="3" />
+
+            <Line X1="0" Y1="600" X2="15" Y2="600" Stroke="#222" StrokeThickness="7" />
+            <Line X1="0" Y1="600" X2="15" Y2="600" Stroke="#999" StrokeThickness="3" />
+
+            <Line X1="0" Y1="700" X2="15" Y2="700" Stroke="#222" StrokeThickness="7" />
+            <Line X1="0" Y1="700" X2="15" Y2="700" Stroke="#999" StrokeThickness="3" />
+
+            <Line X1="0" Y1="800" X2="15" Y2="800" Stroke="#222" StrokeThickness="7" />
+            <Line X1="0" Y1="800" X2="15" Y2="800" Stroke="#999" StrokeThickness="3" />
+
+            <Line X1="0" Y1="900" X2="15" Y2="900" Stroke="#222" StrokeThickness="7" />
+            <Line X1="0" Y1="900" X2="15" Y2="900" Stroke="#999" StrokeThickness="3" />
+
+            <Line X1="0" Y1="1000" X2="15" Y2="1000" Stroke="#222" StrokeThickness="7" />
+            <Line X1="0" Y1="1000" X2="15" Y2="1000" Stroke="#999" StrokeThickness="3" />
+
+            <Line X1="0" Y1="1100" X2="15" Y2="1100" Stroke="#222" StrokeThickness="7" />
+            <Line X1="0" Y1="1100" X2="15" Y2="1100" Stroke="#999" StrokeThickness="3" />
+
+            <Line X1="0" Y1="1200" X2="15" Y2="1200" Stroke="#222" StrokeThickness="7" />
+            <Line X1="0" Y1="1200" X2="15" Y2="1200" Stroke="#999" StrokeThickness="3" />
+
+            <!--25% tick marks-->
+            <Line X1="35" Y1="300" X2="50" Y2="300" Stroke="#222" StrokeThickness="7" />
+            <Line X1="35" Y1="300" X2="50" Y2="300" Stroke="#999" StrokeThickness="3" />
+
+            <Line X1="35" Y1="550" X2="50" Y2="550" Stroke="#222" StrokeThickness="7" />
+            <Line X1="35" Y1="550" X2="50" Y2="550" Stroke="#999" StrokeThickness="3" />
+
+            <Line X1="35" Y1="800" X2="50" Y2="800" Stroke="#222" StrokeThickness="7" />
+            <Line X1="35" Y1="800" X2="50" Y2="800" Stroke="#999" StrokeThickness="3" />
+            
+            <Line X1="35" Y1="1050" X2="50" Y2="1050" Stroke="#222" StrokeThickness="7" />
+            <Line X1="35" Y1="1050" X2="50" Y2="1050" Stroke="#999" StrokeThickness="3" />
+            
+            <!--Outer border-->
+            <Rectangle Height="1300" VerticalAlignment="Bottom" Fill="Transparent" Stroke="#777" StrokeThickness="4" />
+        </Grid>
+    </Viewbox>
+</Window>
