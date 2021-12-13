@@ -1,0 +1,39 @@
+# This file controls CRLF<->LF conversion, upon checkout or commit -- 
+# and lang-specific hints for diff and merge.
+#
+*                   text=auto
+
+*.txt               text
+*.md                text diff=markdown
+
+*.sln               text merge=union eol=crlf
+*.csproj            text merge=union
+
+*.template          text
+*.config            text
+*.json              text
+*.xml               text
+
+*.cmd               text
+*.ps1               text
+
+*.cs                text diff=csharp
+*.java              text diff=java
+
+*.html              text diff=html
+*.js                text diff=js
+*.css               text diff=css
+*.sql               text diff=sql
+
+*.xaml              text
+*.svg               text
+
+.editorconfig       text
+
+.gitattributes      text
+.gitignore          text
+
+*.jpg               binary
+*.png               binary
+*.bmp               binary
+*.pdf               binary
