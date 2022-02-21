@@ -44,8 +44,12 @@ namespace ThrottleOverlay
         //----------------------------------------
         public void ProcessRawInputMessage( IntPtr hRawInput )
         {
+#if DEBUG
+            //Win32.RawInput.LogJoystickEvent(hRawInput);
+#endif
+
             // Decode and track the hardware button-state report.
-            Win32.RawInput.DecodeJoystickJoystickAxisEvent(hRawInput, ThrottleAxisVendorId, ThrottleAxisProductId, ThrottleAxisId, _onStickAxisData);
+            Win32.RawInput.DecodeJoystickAxisEvent(hRawInput, ThrottleAxisVendorId, ThrottleAxisProductId, ThrottleAxisId, _onStickAxisData);
             return;
         }
 

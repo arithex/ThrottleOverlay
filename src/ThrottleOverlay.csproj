@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B02AEE8F-208F-46F6-8D34-86C7163E684F}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>ThrottleOverlay</RootNamespace>
     <AssemblyName>ThrottleOverlay</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -60,6 +60,8 @@
     <Compile Include="RawInputJoystickHandler.cs" />
     <Compile Include="Win32_MessageWindow.cs" />
     <Compile Include="Win32_RawInput.cs" />
+    <Compile Include="Win32_RawInput_Interop.cs" />
+    <Compile Include="Win32_UnmanagedBuffer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

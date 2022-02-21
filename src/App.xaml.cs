@@ -2,15 +2,6 @@
 using System.Windows;
 using System.Windows.Media;
 
-/*
- * TODO, P2:
- * -- config: position of AB detent
- * -- config: customize colors
- * TODO, P3:
- * -- different UX treatments (eg. analog dial)
- * -- sound effects
- */
-
 namespace ThrottleOverlay
 {
     public partial class App : Application
@@ -47,8 +38,11 @@ namespace ThrottleOverlay
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.ToString());
-                System.Diagnostics.Debug.Print(ex.ToString());
+                string stackTrace = "======= EXCEPTION =======\n" 
+                    + ex.ToString();
+
+                Console.Error.WriteLine(stackTrace);
+                System.Diagnostics.Debug.Print(stackTrace);
             }
             return 0;
         }
@@ -72,10 +66,14 @@ namespace ThrottleOverlay
                         if (mainwnd != null)
                         {
                             double throttleScale = RawInputJoystickHandler.ScaledThrottlePosition * 1300;
-                            mainwnd.x_greenMask.Height = throttleScale;
+                            double lastHeight = mainwnd.x_greenMask.Height;
+                            if (throttleScale < lastHeight - 0.1d || throttleScale > lastHeight + 0.1d)
+                            {
+                                mainwnd.x_greenMask.Height = throttleScale;
 
-                            Color c = _GetColorForScaledThrottleValue(throttleScale);
-                            mainwnd.x_greenMask.Fill = new SolidColorBrush(c);
+                                Color c = _GetColorForScaledThrottleValue(throttleScale);
+                                mainwnd.x_greenMask.Fill = new SolidColorBrush(c);
+                            }
                         }
                     }
 
