@@ -53,64 +53,57 @@ namespace Win32
             // Obtain the "preparsed" data for use with subsequent HID functions.
             IntPtr refPreparsedHidBlock = _GetRawInputDeviceInfo_HidDevicePreparsedData_Cached(hDevice);
 
-            // Get the axis (value) caps -- viz. the logical min/max extents.
+            // Get the axis (value) caps -- viz. the logical min/max extents. //TODO: cache this?
             ushort numValueCaps = 1;
             _Interop_Hid.HidP_ValueCaps axisValueCaps = new _Interop_Hid.HidP_ValueCaps();
             {
-                int status = _Interop_Hid.HidP_GetSpecificValueCaps(
+                uint status = _Interop_Hid.HidP_GetSpecificValueCaps(
                     _Interop_Hid.HidP_Input,
                     _Interop_Hid.HID_USAGE_PAGE_GENERIC, 0, axisId,
                     ref axisValueCaps, ref numValueCaps,
                     refPreparsedHidBlock
                 );
+                if (status == _Interop_Hid.HIDP_STATUS_USAGE_NOT_FOUND)
+                    return false;
                 if (status != _Interop_Hid.HIDP_STATUS_SUCCESS)
                     throw new Win32Exception("HidP_GetSpecificValueCaps returned 0x" + status.ToString("X8"));
             }
 
-            //Q: Is it reasonable to assume these are meant to be unsigned? GetUsageValue returns a uint..
-            uint rawMin = (uint)(axisValueCaps.physicalMin);
-            uint rawMax = (uint)(axisValueCaps.physicalMax);
+            //NB: Some devices apparently don't report physicalMin/Max.
+            int logMin = (axisValueCaps.logicalMin);
+            int logMax = (axisValueCaps.logicalMax);
 
             // To fetch the actual data for the axis/buttons, we must use ugly untyped pointer-arithmetic 
             // on the buffer we got from GetRawInputData.  The offset to the start of the HID report data
             // begins at the tail end of the RAWHID structure.
-            uint rawValue = 0U;
+            uint rawValue = 0;
             IntPtr refRawDataBuffer = refRawInputHeaderBlock + Marshal.SizeOf<_Interop_User32.RawInputHeaderAndRawHid>();
             {
                 uint itemCount = riHeaderAndHid.hid.dwCount;
                 uint itemSize = riHeaderAndHid.hid.dwSizeHid;
 
-                int status = _Interop_Hid.HidP_GetUsageValue(
+                uint status = _Interop_Hid.HidP_GetUsageValue(
                     _Interop_Hid.HidP_Input,
                     _Interop_Hid.HID_USAGE_PAGE_GENERIC, 0, axisId,
                     out rawValue,
                     refPreparsedHidBlock,
                     refRawDataBuffer, (itemSize*itemCount)
                 );
+                if (status == _Interop_Hid.HIDP_STATUS_INCOMPATIBLE_REPORT_ID)
+                    return false; //(probably just a button-press with no axis data)
                 if (status != _Interop_Hid.HIDP_STATUS_SUCCESS)
                     throw new Win32Exception("HidP_GetUsageValue returned 0x" + status.ToString("X8"));
             }
 
-            // Validation and cleanup.
-            if (rawValue < rawMin || rawValue > rawMax)
-                throw new ArgumentOutOfRangeException("Encountered HID axis value outside min/max range.");
+            // Apply range-scaling, and invoke callback.
+            double scaledValue = (double)(rawValue - logMin) / (double)(logMax - logMin);
 
-            // Apply physical-range scaling, and invoke callback.
-            double scaledValue = (double)(rawValue - rawMin) / (double)(rawMax - rawMin);
+            scaledValue = Math.Min(Math.Max(0.0d, scaledValue), 1.0d);
 
             onJoystickAxis(scaledValue);
             return true;
         }
 
-        
-//        //----------------------------------------
-//        internal static void LogJoystickEvent( IntPtr hRawInput )
-//        {
-//            // 1. retrieve pidvid
-//            // 2. use HidP_GetData to fetch entire HID report
-//            // 3. use HidP_GetValueCaps to build map of dataIndex=>usageId
-//            // 4. scan data to determine all axes and button states
-//        }
 
         //--------------------------------------------------------------
         // Managed helpers

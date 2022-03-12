@@ -154,20 +154,39 @@ namespace Win32
 
         static class _Interop_Hid
         {
-            internal const int HIDP_STATUS_SUCCESS = 0x00110000;
+            internal const uint HIDP_STATUS_SUCCESS = 0x0011_0000;
+            internal const uint HIDP_STATUS_USAGE_NOT_FOUND = 0xC011_0004;
+            internal const uint HIDP_STATUS_INCOMPATIBLE_REPORT_ID = 0xC011_000A;
 
             internal const int HidP_Input = 0;
             internal const ushort HID_USAGE_PAGE_GENERIC= 1;
             internal const ushort HID_USAGE_GENERIC_JOYSTICK = 4;
 
             [DllImport("Hid.dll", SetLastError = false)]
-            internal static extern uint HidP_MaxUsageListLength(//aka "GetMaxCountOfButtons"
-                uint reportType, ushort usagePage,
+            internal static extern uint HidP_GetCaps(//aka "GetDeviceCapabilities"
+                IntPtr pPreparsedData,
+                out HidP_Caps deviceCaps
+            );
+
+            [DllImport("Hid.dll", SetLastError = false)]
+            internal static extern uint HidP_MaxDataListLength(
+                uint reportType,
                 IntPtr pPreparsedData
             );
 
             [DllImport("Hid.dll", SetLastError = false)]
-            internal static extern int HidP_GetUsages(//aka "GetButtonsCurrentlyPressedInThisHidReport"
+            internal static extern uint HidP_GetData(//aka "GetAllTheDataInThisHidReport"
+                uint reportType,
+                [In, Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] HidP_Data[] dataBlocks,
+                [In, Out] ref uint numDataBlocks,
+                IntPtr pPreparsedData,
+                IntPtr refHidReportBuffer,
+                uint reportLength
+            );
+
+
+            [DllImport("Hid.dll", SetLastError = false)]
+            internal static extern uint HidP_GetUsages(//aka "GetButtonsCurrentlyPressedInThisHidReport"
                 uint reportType, ushort usagePage, ushort linkCollection, 
                 [In, Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex=4)] ushort[] usageList,
                 [In, Out] ref uint usageLength,
@@ -178,24 +197,15 @@ namespace Win32
 
 
             [DllImport("Hid.dll", SetLastError = false)]
-            internal static extern int HidP_MaxDataListLength(
+            internal static extern uint HidP_GetValueCaps(//aka "GetMinMaxRangesForAllAxes"
                 uint reportType,
+                [In, Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] HidP_ValueCaps[] valueCaps,
+                [In, Out] ref ushort numValueCaps,
                 IntPtr pPreparsedData
             );
 
             [DllImport("Hid.dll", SetLastError = false)]
-            internal static extern int HidP_GetData(//aka "GetAllTheDataInThisHidReport"
-                uint reportType,
-                [In, Out, MarshalAs(UnmanagedType.LPArray, SizeParamIndex=2)] ref HidP_Data dataBlock, 
-                [In, Out] ref uint dataLength,
-                IntPtr pPreparsedData,
-                IntPtr refHidReportBuffer,
-                uint reportLength
-            );
-
-
-            [DllImport("Hid.dll", SetLastError = false)]
-            internal static extern int HidP_GetSpecificValueCaps(//aka "GetMinMaxRangesForAxis"
+            internal static extern uint HidP_GetSpecificValueCaps(//aka "GetMinMaxRangeForAxis"
                 uint reportType, ushort usagePage, ushort linkCollection, ushort usage,
                 [In, Out] ref HidP_ValueCaps valueCaps, 
                 [In, Out] ref ushort numValueCaps,
@@ -203,13 +213,45 @@ namespace Win32
             );
 
             [DllImport("Hid.dll", SetLastError = false)]
-            internal static extern int HidP_GetUsageValue(//aka "GetActualPhysicalValueOfAxis"
+            internal static extern uint HidP_GetScaledUsageValue(//aka "GetActualValueOfAxisScaledToLogicalRange"
+                uint reportType, ushort usagePage, ushort linkCollection, ushort usage,
+                out int usageValue,
+                IntPtr pPreparsedData,
+                IntPtr refHidReportBuffer,
+                uint reportLength
+            );
+
+            [DllImport("Hid.dll", SetLastError = false)]
+            internal static extern uint HidP_GetUsageValue(//aka "GetActualPhysicalValueOfAxis"
                 uint reportType, ushort usagePage, ushort linkCollection, ushort usage,
                 out uint usageValue,
                 IntPtr pPreparsedData,
                 IntPtr refHidReportBuffer,
                 uint reportLength
             );
+
+            [StructLayout(LayoutKind.Sequential)] 
+            internal struct HidP_Caps
+            {
+                internal static int MarshalSize = Marshal.SizeOf<HidP_Caps>();
+
+                internal ushort usage;
+                internal ushort usagePage;
+                internal ushort inputReportByteLength;
+                internal ushort outputReportByteLength;
+                internal ushort featureReportByteLength;
+                [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U2, SizeConst = 17)] internal ushort[] _reserved;
+                internal ushort numberLinkCollectionNodes;
+                internal ushort numberInputButtonCaps;
+                internal ushort numberInputValueCaps;
+                internal ushort numberInputDataIndices;
+                internal ushort numberOutputButtonCaps;
+                internal ushort numberOutputValueCaps;
+                internal ushort numberOutputDataIndices;
+                internal ushort numberFeatureButtonCaps;
+                internal ushort numberFeatureValueCaps;
+                internal ushort numberFeatureDataIndices;
+            }
 
             [StructLayout(LayoutKind.Sequential)]
             internal struct HidP_ValueCaps
